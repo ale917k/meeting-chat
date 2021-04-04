@@ -1,0 +1,27 @@
+{
+  "name": "meeting-chat",
+  "version": "0.1.0",
+  "private": true,
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/ale917k/meeting-chat#readme",
+  "bugs": {
+    "url": "https://github.com/ale917k/meeting-chat/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ale917k/meeting-chat.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "scripts": {
+    "bundle": "cd client; npm run bundle",
+    "client": "cd client; npm start",
+    "preinstall": "cd client; npm install; cd ../server; npm install",
+    "server": "cd server; npm start",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
