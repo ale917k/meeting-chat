@@ -1,22 +1,36 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { JoinOuterContainer, JoinInnerContainer, Heading, JoinInput, Button } from "./styles";
+import useStyles from "./styles";
 
 const Join: React.FC = () => {
+  const classes = useStyles();
+
   const [name, setName] = useState<string>("");
   const [room, setRoom] = useState<string>("");
 
   return (
-    <JoinOuterContainer>
-      <JoinInnerContainer>
-        <Heading>Join</Heading>
-        <JoinInput placeholder="Name" type="text" onChange={(event) => setName(event.target.value)} />
-        <JoinInput placeholder="Room" type="text" onChange={(event) => setRoom(event.target.value)} />
+    <div className={classes.outerContainer}>
+      <div className={classes.innerContainer}>
+        <h1 className={classes.heading}>Join</h1>
+        <input
+          type="text"
+          className={classes.input}
+          onChange={(event) => setName(event.target.value)}
+          placeholder="Name"
+        />
+        <input
+          type="text"
+          className={classes.input}
+          onChange={(event) => setRoom(event.target.value)}
+          placeholder="Room"
+        />
         <Link onClick={(e) => (!name || !room ? e.preventDefault() : null)} to={`/chat?name=${name}&room=${room}`}>
-          <Button type="submit">Sign In</Button>
+          <button type="submit" className={classes.button}>
+            Sign In
+          </button>
         </Link>
-      </JoinInnerContainer>
-    </JoinOuterContainer>
+      </div>
+    </div>
   );
 };
 

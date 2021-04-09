@@ -1,9 +1,11 @@
-import styled from "styled-components";
+import { makeStyles } from "@material-ui/core/styles";
 
-const MessagesWrapper = styled.div`
-  flex: auto;
-  padding: 5% 0;
-  overflow: auto;
-`;
+const useStyles = makeStyles(() => ({
+  wrapper: {
+    flex: "auto",
+    padding: "5% 0",
+    overflow: "auto",
+  },
+}));
 
-export default MessagesWrapper;
+export default useStyles;

@@ -5,11 +5,13 @@ import io from "socket.io-client";
 import InfoBar from "components/InfoBar";
 import Input from "components/Input";
 import Messages from "components/Messages";
-import { OuterContainer, Container } from "./styles";
+import useStyles from "./styles";
 
 let socket: SocketIOClient.Socket;
 
 const Chat: React.FC<RouteComponentProps> = ({ location }: RouteComponentProps) => {
+  const classes = useStyles();
+
   const [name, setName] = useState<string>("");
   const [room, setRoom] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -50,13 +52,13 @@ const Chat: React.FC<RouteComponentProps> = ({ location }: RouteComponentProps) 
   };
 
   return (
-    <OuterContainer>
-      <Container>
+    <div className={classes.outerContainer}>
+      <div className={classes.container}>
         <InfoBar room={room} />
         <Messages messages={messages} name={name} />
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-      </Container>
-    </OuterContainer>
+      </div>
+    </div>
   );
 };
 

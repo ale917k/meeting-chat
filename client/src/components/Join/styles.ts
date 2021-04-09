@@ -1,44 +1,43 @@
-import styled from "styled-components";
-import { theme } from "globalStyles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 
-export const JoinOuterContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background-color: ${theme.palette.common.black};
-`;
+const useStyles = makeStyles((theme: Theme) => ({
+  outerContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    backgroundColor: theme.palette.common.black,
+  },
+  innerContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: theme.spacing(2),
+    width: theme.spacing(50),
+    padding: theme.spacing(1),
+  },
+  input: {
+    width: "100%",
+    border: "none",
+    borderRadius: 0,
+    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
+  },
+  heading: {
+    borderBottom: `2px solid ${theme.palette.common.white}`,
+    paddingBottom: theme.spacing(1),
+    color: theme.palette.common.white,
+    fontSize: "2.5rem",
+  },
+  button: {
+    display: "inline-block",
+    width: "100%",
+    background: theme.palette.primary.main,
+    border: "none",
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(3),
+    color: `${theme.palette.common.white} !important`,
+    textTransform: "uppercase",
+    textDecoration: "none",
+  },
+}));
 
-export const JoinInnerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing(2)};
-  width: ${theme.spacing(50)};
-  padding: ${theme.spacing(1)};
-`;
-
-export const JoinInput = styled.input`
-  width: 100%;
-  border: none;
-  border-radius: 0;
-  padding: ${`${theme.spacing(2)} ${theme.spacing(3)}`};
-`;
-
-export const Heading = styled.h1`
-  border-bottom: 2px solid ${theme.palette.common.white};
-  padding-bottom: ${theme.spacing(1)};
-  color: ${theme.palette.common.white};
-  font-size: 2.5rem;
-`;
-
-export const Button = styled.button`
-  display: inline-block;
-  width: 100%;
-  background: ${theme.palette.primary};
-  border: none;
-  border-radius: ${theme.shape.borderRadius};
-  padding: ${theme.spacing(3)};
-  color: ${theme.palette.common.white} !important;
-  text-transform: uppercase;
-  text-decoration: none;
-`;
+export default useStyles;
