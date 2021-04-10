@@ -1,13 +1,13 @@
 import React, { Dispatch, KeyboardEvent, MouseEvent, SetStateAction } from "react";
 import useStyles from "./styles";
 
-type PropsType = {
+type Props = {
   message: string;
   setMessage: Dispatch<SetStateAction<string>>;
   sendMessage: (event: KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>) => void;
 };
 
-const Input: React.FC<PropsType> = ({ message, setMessage, sendMessage }: PropsType) => {
+const Input: React.FC<Props> = ({ message, setMessage, sendMessage }: Props) => {
   const classes = useStyles();
 
   return (

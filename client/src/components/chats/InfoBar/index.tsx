@@ -3,11 +3,11 @@ import onlineIcon from "icons/onlineIcon.png";
 import closeIcon from "icons/closeIcon.png";
 import useStyles from "./styles";
 
-type PropsType = {
+type Props = {
   room: string;
 };
 
-const InfoBar: React.FC<PropsType> = ({ room }: PropsType) => {
+const InfoBar: React.FC<Props> = ({ room }: Props) => {
   const classes = useStyles();
 
   return (

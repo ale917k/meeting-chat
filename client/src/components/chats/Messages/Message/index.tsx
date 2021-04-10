@@ -2,12 +2,12 @@ import React from "react";
 import ReactEmoji from "react-emoji";
 import useStyles from "./styles";
 
-type PropsType = {
-  message: MessageType;
+type Props = {
+  message: Message;
   name: string;
 };
 
-const Message: React.FC<PropsType> = ({ message: { user, text }, name }: PropsType) => {
+const Message: React.FC<Props> = ({ message: { user, text }, name }: Props) => {
   const classes = useStyles();
 
   let isSentByCurrentUser = false;

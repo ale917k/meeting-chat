@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { useGlobalStyles } from "globalStyles";
-import Join from "./components/Join";
-import Chat from "./components/Chat";
+import Join from "components/chats/Join";
+import Chat from "components/chats/Chat";
 
 const App: React.FC = () => {
   useGlobalStyles();

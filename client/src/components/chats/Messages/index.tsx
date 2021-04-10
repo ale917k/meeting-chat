@@ -2,12 +2,12 @@ import React, { Fragment } from "react";
 import Message from "./Message";
 import useStyles from "./styles";
 
-type PropsType = {
-  messages: MessageType[];
+type Props = {
+  messages: Message[];
   name: string;
 };
 
-const Messages: React.FC<PropsType> = ({ messages, name }: PropsType) => {
+const Messages: React.FC<Props> = ({ messages, name }: Props) => {
   const classes = useStyles();
 
   return (

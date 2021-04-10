@@ -1,13 +1,13 @@
 declare module "react-emoji";
 
 // Models
-type UserType = {
+type User = {
   id: string;
   name: string;
   room: string;
 };
 
-type MessageType = {
+type Message = {
   user: string;
   text: string;
 };

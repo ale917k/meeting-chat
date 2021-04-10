@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import queryString from "query-string";
 import io from "socket.io-client";
-import InfoBar from "components/InfoBar";
-import Input from "components/Input";
-import Messages from "components/Messages";
+import InfoBar from "components/chats/InfoBar";
+import Input from "components/chats/Input";
+import Messages from "components/chats/Messages";
 import useStyles from "./styles";
 
 let socket: SocketIOClient.Socket;
@@ -15,7 +15,7 @@ const Chat: React.FC<RouteComponentProps> = ({ location }: RouteComponentProps) 
   const [name, setName] = useState<string>("");
   const [room, setRoom] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const ENDPOINT = "http://localhost:8080/";
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const Chat: React.FC<RouteComponentProps> = ({ location }: RouteComponentProps) 
 
   useEffect(() => {
     socket.on("message", (newMessage: never) => {
-      setMessages((prevState: MessageType[]) => [...prevState, newMessage]);
+      setMessages((prevState: Message[]) => [...prevState, newMessage]);
     });
   }, []);
 
