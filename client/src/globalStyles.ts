@@ -6,6 +6,7 @@ export const theme = createMuiTheme({
       white: "#FFFFFF",
       black: "#1A1A1A",
     },
+    type: "dark",
     primary: {
       light: "#5C98FF",
       main: "#2979ff",
@@ -17,6 +18,18 @@ export const theme = createMuiTheme({
   },
   typography: {
     fontFamily: `"Quicksand", "Roboto", "Arial", "sans-serif"`,
+    h1: {
+      fontSize: "2.441rem",
+    },
+    h2: {
+      fontSize: "1.953rem",
+    },
+    h3: {
+      fontSize: "1.563rem",
+    },
+    h4: {
+      fontSize: "1.25rem",
+    },
   },
   shape: {
     borderRadius: 8,
