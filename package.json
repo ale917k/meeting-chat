@@ -17,8 +17,9 @@
   "scripts": {
     "bundle": "cd client; npm run bundle",
     "client": "cd client; npm start",
-    "preinstall": "cd client; npm install; cd ../server; npm install",
-    "server": "cd server; npm start",
+    "preinstall": "cd client; npm install --legacy-peer-deps; cd ../server; npm install",
+    "prod": "cp docker-compose.prd.yml docker-compose.yml; docker-compose down; docker-compose up --build --remove-orphans",
+    "server": "cp docker-compose.dev.yml docker-compose.yml; docker-compose down; docker-compose up --build --remove-orphans",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "devDependencies": {

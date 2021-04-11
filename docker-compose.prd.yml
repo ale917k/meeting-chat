@@ -1,0 +1,57 @@
+version: "3.0"
+
+services:
+  # React Client
+  web:
+    image: 163575307513.dkr.ecr.eu-west-2.amazonaws.com/mealner-client:latest
+    ports:
+      - "80:80"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: mealner
+        awslogs-region: eu-west-2
+        awslogs-stream-prefix: web
+
+  # Node Server
+  node:
+    image: 163575307513.dkr.ecr.eu-west-2.amazonaws.com/mealner-server:latest
+    command: npm start
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      MONGO_URI: $MONGO_PRD_URI
+      REDIS_URI: $REDIS_PRD_URI
+    ports:
+      - "8080:8080"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: mealner
+        awslogs-region: eu-west-2
+        awslogs-stream-prefix: node
+
+  # MongoDB
+  mongodb:
+    image: mongo
+    env_file: .env
+    ports:
+      - "27017-27019:27017-27019"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: mealner
+        awslogs-region: eu-west-2
+        awslogs-stream-prefix: mongodb
+
+  #Redis
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: mealner
+        awslogs-region: eu-west-2
+        awslogs-stream-prefix: redis

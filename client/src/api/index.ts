@@ -10,21 +10,19 @@ type HttpResponse = Response & {
 const http = async (request: RequestInfo): Promise<HttpResponse> => {
   const response: HttpResponse = await fetch(request);
 
-  const { ok, status, statusText, url, parsedBody } = response;
-
   try {
     // may error if there is no body
     response.parsedBody = await response.json();
   } catch (ex) {}
 
+  const { ok, parsedBody } = response;
+
   if (!ok) {
-    throw new Error(`Status: ${status} - Status Text: ${statusText} - Api url: ${url}`);
+    throw new Error(parsedBody?.error);
   }
 
-  if (response.parsedBody?.error) {
-    throw new Error(
-      `Error: ${parsedBody?.error} - Status: ${response.status} - Status Text: ${response.statusText} - Api url: ${response.url}`,
-    );
+  if (parsedBody?.error) {
+    throw new Error(parsedBody?.error);
   }
 
   return response;
@@ -51,7 +49,7 @@ export const get = async (path: string, args: RequestInit = { method: "get" }): 
 export const post = async <Body>(
   path: string,
   body: Body | null,
-  args: RequestInit = { method: "post", body: JSON.stringify(body) },
+  args: RequestInit = { method: "post", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) },
 ): Promise<ServerResponse | undefined> => {
   const response = await http(new Request(path, args));
   return response.parsedBody;
@@ -67,7 +65,7 @@ export const post = async <Body>(
 export const put = async <Body>(
   path: string,
   body: Body | null,
-  args: RequestInit = { method: "put", body: JSON.stringify(body) },
+  args: RequestInit = { method: "put", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) },
 ): Promise<ServerResponse | undefined> => {
   const response = await http(new Request(path, args));
   return response.parsedBody;
@@ -83,7 +81,7 @@ export const put = async <Body>(
 export const patch = async <Body>(
   path: string,
   body: Body | null,
-  args: RequestInit = { method: "PATCH", body: JSON.stringify(body) },
+  args: RequestInit = { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) },
 ): Promise<ServerResponse | undefined> => {
   const response = await http(new Request(path, args));
   return response.parsedBody;
@@ -99,7 +97,7 @@ export const patch = async <Body>(
 export const del = async <Body>(
   path: string,
   body: Body | null,
-  args: RequestInit = { method: "delete", body: JSON.stringify(body) },
+  args: RequestInit = { method: "delete", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) },
 ): Promise<ServerResponse | undefined> => {
   const response = await http(new Request(path, args));
   return response.parsedBody;

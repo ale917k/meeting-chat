@@ -1,57 +1,88 @@
-import React, { lazy, Suspense } from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { lazy, Suspense, useContext, useEffect } from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { loginUserWithToken, retrieveUser } from "api/users";
+import Store from "context";
+import UserTypes from "context/user/types";
 import { useGlobalStyles } from "globalStyles";
 import Spinner from "components/global/Spinner";
 
 // Lazy loaded pages
 const Join = lazy(() => import("pages/Join"));
-const Chat = lazy(() => import("pages/Chat"));
 const Register = lazy(() => import("pages/Register"));
 const Login = lazy(() => import("pages/Login"));
 const PageNotFound = lazy(() => import("pages/PageNotFound"));
 
 // Lazy loaded routes
 const routes = [
-  {
-    path: "/",
-    Component: Join,
-    requireAuth: false,
-  },
-  { path: "/chat", Component: Chat, requireAuth: false },
+  { path: "/chats", Component: Join, inApp: true },
   {
     path: "/registrati",
     Component: Register,
-    requireAuth: false,
+    inApp: false,
   },
-  { path: "/accedi", Component: Login, requireAuth: false },
+  { path: "/accedi", Component: Login, inApp: false },
 ];
 
 const App: React.FC = () => {
   useGlobalStyles();
 
+  // Context for retrieving User state from Store
+  const { user, dispatch } = useContext(Store);
+
+  useEffect(() => {
+    // Check if any localStorage token already exist
+    const token = window.localStorage.getItem("mChatAccToken");
+
+    token &&
+      !user &&
+      loginUserWithToken(token)
+        .then((userId) =>
+          retrieveUser(userId as string)
+            .then((loggedUser) =>
+              dispatch({
+                type: UserTypes.Set,
+                payload: loggedUser as User,
+              }),
+            )
+            .catch((err) => console.error("retrieveUser App err", err)),
+        )
+        .catch((err) => console.error("loginUserWithToken App err", err));
+  }, []);
+
   return (
-    <Switch>
-      {routes.map(({ path, Component }) => (
+    <>
+      <Switch>
+        {routes.map(({ path, Component, inApp }) => (
+          <Route key={path} exact path={path}>
+            {path === "/registrati" || path === "/accedi" ? (
+              <>
+                {user ? (
+                  <Redirect to="/" />
+                ) : (
+                  <Suspense fallback={<Spinner />}>
+                    <Component />
+                  </Suspense>
+                )}
+              </>
+            ) : inApp && !user ? (
+              <Redirect to="/accedi" />
+            ) : (
+              <Suspense fallback={<Spinner />}>
+                <Component />
+              </Suspense>
+            )}
+          </Route>
+        ))}
         <Route
-          key={path}
-          exact
-          path={path}
-          render={(routeProps) => (
+          path="*"
+          render={() => (
             <Suspense fallback={<Spinner />}>
-              <Component {...routeProps} />
+              <PageNotFound />
             </Suspense>
           )}
-        ></Route>
-      ))}
-      <Route
-        path="*"
-        render={() => (
-          <Suspense fallback={<Spinner />}>
-            <PageNotFound />
-          </Suspense>
-        )}
-      />
-    </Switch>
+        />
+      </Switch>
+    </>
   );
 };
 

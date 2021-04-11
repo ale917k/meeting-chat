@@ -60,7 +60,7 @@ type AlertMessage = {
 
 // User registration / login and edit user info forms
 type RegUserForm = {
-  name: string;
+  username: string;
   born: Date | null;
   status: boolean;
   password: string;
@@ -69,12 +69,12 @@ type RegUserForm = {
 };
 
 type LogUserForm = {
-  name: string;
+  username: string;
   password: string;
 };
 
 type EditUserInfo = {
-  name?: string;
+  username?: string;
   email?: string;
 };
 

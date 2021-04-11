@@ -70,7 +70,6 @@ export const loginUser = async (authData: LogUserForm, admin: boolean): Promise<
  * @returns {User | undefined} Either User document or undefined if errored.
  */
 export const addNewUser = async (newData: RegUserForm | User, admin: boolean): Promise<User | undefined> => {
-  console.log("newData", newData);
   try {
     const response = await post("/api/users", newData);
 

@@ -14,7 +14,7 @@ const Register: React.FC = () => {
   const registerForm = [
     {
       type: "text",
-      name: "name",
+      name: "username",
       label: "Nome",
       required: true,
     },
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
     <CardForm
       title="Registrati"
       initialForm={{
-        name: "",
+        username: "",
         born: null,
         password: "",
         status: false,

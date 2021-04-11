@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  # Node Server
+  server:
+    container_name: server
+    restart: unless-stopped
+    build: ./server/
+    command: npm start
+    working_dir: /app/server/
+    env_file: .env
+    environment:
+      NODE_ENV: development
+      MONGO_URI: $MONGO_DEV_URI
+      REDIS_URI: $REDIS_DEV_URI
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server/:/app/server/
+    links:
+      - mongodb
+      - redis
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  # MongoDB
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    restart: unless-stopped
+    command: mongod --config /etc/mongod.conf
+    env_file: .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+      MONGO_INITDB_DATABASE: $MONGO_INITDB_DATABASE
+    ports:
+      - "27017-27019:27017-27019"
+    volumes:
+      - ./server/src/database/mongod.conf:/etc/mongod.conf
+      - ./server/src/database/mongo-init.js/:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./server/src/database/data/:/data/db
+      - ./server/src/database/:/var/log/mongodb/
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/meetingChatDB --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 100s
+
+  #Redis
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"

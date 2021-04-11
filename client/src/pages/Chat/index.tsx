@@ -41,6 +41,10 @@ const Chat: React.FC<RouteComponentProps> = ({ location }: RouteComponentProps) 
     socket.on("message", (newMessage: never) => {
       setMessages((prevState: Message[]) => [...prevState, newMessage]);
     });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const sendMessage = (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>) => {

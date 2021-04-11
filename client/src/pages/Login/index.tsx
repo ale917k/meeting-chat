@@ -17,7 +17,7 @@ const Login: React.FC<PropsType> = ({ admin }: PropsType) => {
   const loginForm = [
     {
       type: "text",
-      name: "name",
+      name: "username",
       label: "Nome",
       required: true,
     },
@@ -33,7 +33,7 @@ const Login: React.FC<PropsType> = ({ admin }: PropsType) => {
     <CardForm
       title="Accedi"
       initialForm={{
-        name: "",
+        username: "",
         password: "",
       }}
       inputList={loginForm}

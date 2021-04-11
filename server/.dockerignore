@@ -1,0 +1,17 @@
+**/node_modules
+
+**/dist
+**/dump
+
+.dockerignore
+Dockerfile
+Dockerfile.prod
+
+.env
+.git
+.gitignore
+
+README.md
+
+npm-debug.log
+**/.DS_Store
