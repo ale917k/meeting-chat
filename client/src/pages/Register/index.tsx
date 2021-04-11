@@ -5,9 +5,7 @@ import Link from "@material-ui/core/Link";
 import CardForm from "components/global/CardForm";
 
 /**
- * @name Register
  * Page for registering new Users.
- * @returns Controlled form which triggers a POST request at /users on form submission.
  */
 const Register: React.FC = () => {
   // Form for registering new User

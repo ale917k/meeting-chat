@@ -9,8 +9,8 @@ type PropsType = {
 };
 
 /**
- * Login page for logging into user account on form submission.
- * @returns Controlled form which triggers a POST request at /users/signin on form submission.
+ * Page for logging users.
+ * @param {boolean} admin - Log user as administrator.
  */
 const Login: React.FC<PropsType> = ({ admin }: PropsType) => {
   // Form for logging User into account

@@ -17,6 +17,15 @@ type Props = {
   required: boolean;
 };
 
+/**
+ * Mui Text field used for inputs of type text | email | password.
+ * @param {function} handleChange - Hook function for updating controlled input.
+ * @param {string} type - Element type property.
+ * @param {string} label - Element label.
+ * @param {string} name - Element name property.
+ * @param {string} value - Element value property.
+ * @param {boolean} required - Element required property.
+ */
 const TextField: React.FC<Props> = ({ handleChange, type, label, name, value, required }: Props) => {
   const classes = useStyles();
 

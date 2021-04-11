@@ -27,14 +27,14 @@ type Props = {
 };
 
 /**
- * Handle any CRUD method through dynamic form and Hooks.
+ * Handle CRUD methods through creation of dynamic forms.
  * @param {string} title - Title to display on top of the form.
  * @param {Object} initialForm - Initial shape of the form data.
  * @param {array} inputList - List of inputs and related attributes to display on the form.
  * @param {string} requestType - Type of CRUD request to apply.
  * @param {string} buttonText - Text to display on submit button.
  * @param {ReactNode} children - Display custom content below form.
- * @return - Generic form to apply CRUD methods to server.
+ * @return Generic form to apply CRUD methods to server.
  */
 const CardForm: React.FC<Props> = ({ title, initialForm, inputList, requestType, buttonText, children }: Props) => {
   const classes = useStyles();

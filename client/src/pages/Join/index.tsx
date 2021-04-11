@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
 
+/**
+ * Page allowing to join new chat rooms.
+ */
 const Join: React.FC = () => {
   const classes = useStyles();
 

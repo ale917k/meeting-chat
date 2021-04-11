@@ -2,8 +2,7 @@ import React from "react";
 import useStyles from "./styles";
 
 /**
- * Spinner component, used when lazy loading pages / components.
- * @return - Spinner animated through css keyframes.
+ * Spinner component, used for lazy loaded pages / components.
  */
 const Spinner: React.FC = () => {
   const classes = useStyles();

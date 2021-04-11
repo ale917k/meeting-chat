@@ -6,12 +6,20 @@ import useStyles from "./styles";
 type Props = {
   date: Date | null;
   setDate: Dispatch<SetStateAction<Date | null>>;
-  name: string;
   label: string;
+  name: string;
   required: boolean;
 };
 
-const DatePicker: React.FC<Props> = ({ date, setDate, name, label, required }: Props) => {
+/**
+ * Input picker with popup for selecting new Date.
+ * @param {Date} date - Controlled state with selected date.
+ * @param {function} setDate - Hook function for selecting new dates.
+ * @param {string} label - Element label.
+ * @param {string} name - Element name property.
+ * @param {boolean} required - Element required property.
+ */
+const DatePicker: React.FC<Props> = ({ date, setDate, label, name, required }: Props) => {
   const classes = useStyles();
 
   // Limit max available date to 14 years ago

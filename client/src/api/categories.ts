@@ -1,3 +1,6 @@
+/**
+ * Chats categories / topics.
+ */
 const categories = [
   "Categoria 1",
   "Categoria 2",

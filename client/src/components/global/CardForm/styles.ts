@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(1),
     backgroundColor: theme.palette.common.black,
     textAlign: "center",
-    // color: theme.palette.common.white,
   },
   innerContainer: {
     display: "flex",
@@ -23,11 +22,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   field: {
     marginBottom: theme.spacing(2),
-    // backgroundColor: theme.palette.common.white,
-
-    // "&:hover": {
-    //   backgroundColor: "rgba(255, 255, 255, 0.13)",
-    // },
   },
 }));
 

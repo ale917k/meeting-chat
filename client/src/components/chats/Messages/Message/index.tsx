@@ -7,6 +7,11 @@ type Props = {
   name: string;
 };
 
+/**
+ * Chat message.
+ * @param {object} message - Object containing message info e.g. text and user author.
+ * @param {string} name - Chat room name.
+ */
 const Message: React.FC<Props> = ({ message: { user, text }, name }: Props) => {
   const classes = useStyles();
 

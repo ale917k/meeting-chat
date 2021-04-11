@@ -23,6 +23,9 @@ const routes = [
   { path: "/accedi", Component: Login, inApp: false },
 ];
 
+/**
+ * Top-level App component containing all main routes.
+ */
 const App: React.FC = () => {
   useGlobalStyles();
 

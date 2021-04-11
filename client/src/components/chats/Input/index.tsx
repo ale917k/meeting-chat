@@ -7,6 +7,12 @@ type Props = {
   sendMessage: (event: KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>) => void;
 };
 
+/**
+ * Chat input for writing new message.
+ * @param {string} message - Controlled state with message to send.
+ * @param {function} setMessage - Hook function for updating message state.
+ * @param {function} sendMessage - Submit message when triggered.
+ */
 const Input: React.FC<Props> = ({ message, setMessage, sendMessage }: Props) => {
   const classes = useStyles();
 
@@ -20,8 +26,8 @@ const Input: React.FC<Props> = ({ message, setMessage, sendMessage }: Props) => 
         onChange={(e) => setMessage(e.target.value)}
         onKeyPress={(e) => e.key === "Enter" && sendMessage(e)}
       />
-      <button type="button" className={classes.button} onClick={(e) => sendMessage(e)}>
-        <i className="fa fa-paper-plane" />
+      <button type="button" className={classes.button} onClick={sendMessage}>
+        Invia
       </button>
     </form>
   );

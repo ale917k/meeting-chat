@@ -7,6 +7,10 @@ type Props = {
   room: string;
 };
 
+/**
+ * Top bar displaying chat information.
+ * @param {string} room - Chat room name to display.
+ */
 const InfoBar: React.FC<Props> = ({ room }: Props) => {
   const classes = useStyles();
 

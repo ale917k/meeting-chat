@@ -9,6 +9,10 @@ import useStyles from "./styles";
 
 let socket: SocketIOClient.Socket;
 
+/**
+ * Real-time 1-1 messaging chat connected through socket.io.
+ * @param {object} location - React-router-dom location used for retrieving user name and room from url path.
+ */
 const Chat: React.FC<RouteComponentProps> = ({ location }: RouteComponentProps) => {
   const classes = useStyles();
 

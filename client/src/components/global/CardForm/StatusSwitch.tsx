@@ -16,6 +16,13 @@ type Props = {
   name: string;
 };
 
+/**
+ * Switch for user status; If set on true, enable fields for creating new conversation.
+ * @param {object} form - Controlled state with switch and hidden fields values.
+ * @param {function} handleChange - Hook function for updating controlled inputs.
+ * @param {string} label - Element label.
+ * @param {string} name - Element name property.
+ */
 const StatusSwitch: React.FC<Props> = ({ form, handleChange, label, name }: Props) => {
   const classes = useStyles();
 
