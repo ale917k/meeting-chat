@@ -6,7 +6,7 @@ export const theme = createMuiTheme({
       white: "#FFFFFF",
       black: "#1A1A1A",
     },
-    type: "dark",
+    type: "light",
     primary: {
       light: "#5C98FF",
       main: "#2979ff",
@@ -65,8 +65,6 @@ export const useGlobalStyles = makeStyles(() => ({
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-
-      "& > *": windowStyles,
     },
 
     a: {

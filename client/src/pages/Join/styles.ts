@@ -5,8 +5,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    textAlign: "center",
+    width: "100%",
+    height: "100%",
     backgroundColor: theme.palette.common.black,
+    textAlign: "center",
   },
   innerContainer: {
     display: "flex",

@@ -5,16 +5,25 @@ import Store from "context";
 import UserTypes from "context/user/types";
 import { useGlobalStyles } from "globalStyles";
 import Spinner from "components/global/Spinner";
+import Header from "components/global/Header";
 
 // Lazy loaded pages
+const Home = lazy(() => import("pages/Home"));
 const Join = lazy(() => import("pages/Join"));
+const Settings = lazy(() => import("pages/Settings"));
 const Register = lazy(() => import("pages/Register"));
 const Login = lazy(() => import("pages/Login"));
 const PageNotFound = lazy(() => import("pages/PageNotFound"));
 
 // Lazy loaded routes
 const routes = [
+  {
+    path: "/",
+    Component: Home,
+    inApp: true,
+  },
   { path: "/chats", Component: Join, inApp: true },
+  { path: "/impostazioni", Component: Settings, inApp: true },
   {
     path: "/registrati",
     Component: Register,
@@ -54,6 +63,7 @@ const App: React.FC = () => {
 
   return (
     <>
+      <Route path={routes.filter((route) => route.inApp).map((route) => route.path)} render={() => <Header />} />
       <Switch>
         {routes.map(({ path, Component, inApp }) => (
           <Route key={path} exact path={path}>
