@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useContext, useEffect } from "react";
+import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { loginUserWithToken, retrieveUser } from "api/users";
 import Store from "context";
@@ -41,60 +41,80 @@ const App: React.FC = () => {
   // Context for retrieving User state from Store
   const { user, dispatch } = useContext(Store);
 
+  const [appLoaded, setAppLoaded] = useState(false);
+
   useEffect(() => {
     // Check if any localStorage token already exist
     const token = window.localStorage.getItem("mChatAccToken");
 
-    token &&
+    if (token) {
       !user &&
-      loginUserWithToken(token)
-        .then((userId) =>
-          retrieveUser(userId as string)
-            .then((loggedUser) =>
-              dispatch({
-                type: UserTypes.Set,
-                payload: loggedUser as User,
+        loginUserWithToken(token)
+          .then((userId) =>
+            retrieveUser(userId as string)
+              .then((loggedUser) => {
+                dispatch({
+                  type: UserTypes.Set,
+                  payload: loggedUser as User,
+                });
+                setAppLoaded(true);
+              })
+              .catch((err) => {
+                console.error("retrieveUser App err", err);
+                setAppLoaded(true);
               }),
-            )
-            .catch((err) => console.error("retrieveUser App err", err)),
-        )
-        .catch((err) => console.error("loginUserWithToken App err", err));
+          )
+          .catch((err) => {
+            console.error("loginUserWithToken App err", err);
+            setAppLoaded(true);
+          });
+    } else {
+      setAppLoaded(true);
+    }
   }, []);
 
   return (
     <>
-      <Route path={routes.filter((route) => route.inApp).map((route) => route.path)} render={() => <Header />} />
-      <Switch>
-        {routes.map(({ path, Component, inApp }) => (
-          <Route key={path} exact path={path}>
-            {path === "/registrati" || path === "/accedi" ? (
-              <>
-                {user ? (
-                  <Redirect to="/" />
+      {appLoaded && (
+        <>
+          <Route
+            path={routes.filter((route) => route.inApp).map((route) => route.path)}
+            exact
+            render={() => <Header />}
+          />
+          <Switch>
+            {routes.map(({ path, Component, inApp }) => (
+              <Route key={path} exact path={path}>
+                {path === "/registrati" || path === "/accedi" ? (
+                  <>
+                    {user ? (
+                      <Redirect to="/" />
+                    ) : (
+                      <Suspense fallback={<Spinner />}>
+                        <Component />
+                      </Suspense>
+                    )}
+                  </>
+                ) : inApp && !user ? (
+                  <Redirect to="/accedi" />
                 ) : (
                   <Suspense fallback={<Spinner />}>
                     <Component />
                   </Suspense>
                 )}
-              </>
-            ) : inApp && !user ? (
-              <Redirect to="/accedi" />
-            ) : (
-              <Suspense fallback={<Spinner />}>
-                <Component />
-              </Suspense>
-            )}
-          </Route>
-        ))}
-        <Route
-          path="*"
-          render={() => (
-            <Suspense fallback={<Spinner />}>
-              <PageNotFound />
-            </Suspense>
-          )}
-        />
-      </Switch>
+              </Route>
+            ))}
+            <Route
+              path="*"
+              render={() => (
+                <Suspense fallback={<Spinner />}>
+                  <PageNotFound />
+                </Suspense>
+              )}
+            />
+          </Switch>
+        </>
+      )}
     </>
   );
 };
