@@ -53,21 +53,90 @@ router
       });
   })
   .patch((req, res) => {
-    // Update User information
-    User.updateOne({ _id: req.params.userId }, req.body)
-      .then((result) => {
-        res.status(201).json({
-          success: true,
-          data: result,
+    // Set New Password
+    if (req.body.oldPassword) {
+      User.findOne({ _id: req.params.userId })
+        .then((user) => {
+          if (user) {
+            user.changePassword(req.body.oldPassword, req.body.newPassword, (err) => {
+              if (err) {
+                res.status(500).json({
+                  success: false,
+                  error: "Password corrente incorretta",
+                });
+              } else {
+                const { hash, salt, ...updatedUser } = user;
+                res.status(201).json({
+                  success: true,
+                  data: updatedUser,
+                });
+              }
+            });
+          } else {
+            res.status(500).json({
+              success: false,
+              error: "User does not exist. Failed Setting New Password",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json({
+            success: false,
+            error: `Failed Setting New Password: ${err}`,
+          });
         });
-      })
-      .catch((err) => {
-        console.log("err", err);
-        res.status(500).json({
-          success: false,
-          error: `Failed Updating User: ${err}`,
+      // Reset Password
+    } else if (req.body.newPassword) {
+      User.findOne({ _id: req.params.userId })
+        .then((user) => {
+          if (user) {
+            user.setPassword(req.body.newPassword, (err) => {
+              if (err) {
+                res.status(500).json({
+                  success: false,
+                  error: `Failed Resetting Password: ${err}`,
+                });
+              } else {
+                user.save();
+                const { hash, salt, ...updatedUser } = user;
+                res.status(201).json({
+                  success: true,
+                  data: updatedUser,
+                });
+              }
+            });
+          } else {
+            res.status(500).json({
+              success: false,
+              error: "User does not exist. Failed Resetting Password",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json({
+            success: false,
+            error: `Failed Resetting Password: ${err}`,
+          });
         });
-      });
+      // Update User information
+    } else {
+      User.findOneAndUpdate({ _id: req.params.userId }, req.body, { new: true })
+        .then((result) => {
+          res.status(201).json({
+            success: true,
+            data: result,
+          });
+        })
+        .catch((err) => {
+          console.log("err", err);
+          res.status(500).json({
+            success: false,
+            error: `Failed Updating User: ${err}`,
+          });
+        });
+    }
   })
   .delete((req, res) => {
     User.deleteOne({ _id: req.params.userId })

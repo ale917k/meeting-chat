@@ -1,24 +1,17 @@
 import React, { useState, useContext } from "react";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import Alert from "@material-ui/lab/Alert";
-import { addNewUser, loginUser, editUser } from "api/users";
 import Store from "context";
-import UserTypes from "context/user/types";
+import Alert from "components/global/Alert";
 import TextField from "./TextField";
 import DatePicker from "./DatePicker";
 import StatusSwitch from "./StatusSwitch";
+import { handleChange, handleSubmit } from "./utils";
 import useStyles from "./styles";
-
-type Input = {
-  type: string;
-  name: string;
-  label: string;
-  required: boolean;
-};
 
 type Props = {
   title: string;
+  titleVariant?: Variant | "inherit";
   initialForm: Form;
   inputList: Array<Input>;
   requestType: string;
@@ -29,6 +22,7 @@ type Props = {
 /**
  * Handle CRUD methods through creation of dynamic forms.
  * @param {string} title - Title to display on top of the form.
+ * @param {string} titleVariant - Title element to display (e.g. h1, body2, ecc.).
  * @param {Object} initialForm - Initial shape of the form data.
  * @param {array} inputList - List of inputs and related attributes to display on the form.
  * @param {string} requestType - Type of CRUD request to apply.
@@ -36,7 +30,15 @@ type Props = {
  * @param {ReactNode} children - Display custom content below form.
  * @return Generic form to apply CRUD methods to server.
  */
-const CardForm: React.FC<Props> = ({ title, initialForm, inputList, requestType, buttonText, children }: Props) => {
+const CardForm: React.FC<Props> = ({
+  title,
+  titleVariant,
+  initialForm,
+  inputList,
+  requestType,
+  buttonText,
+  children,
+}: Props) => {
   const classes = useStyles();
 
   // Context for retrieving and dispatching User state from and to Store
@@ -57,89 +59,14 @@ const CardForm: React.FC<Props> = ({ title, initialForm, inputList, requestType,
   };
   const [alertMessage, setAlertMessage] = useState<AlertMessage>(initialAlertMessage);
 
-  // Listen to form inputs and updates form state respectively
-  const handleChange = (event: React.ChangeEvent<MuiEvent>) => {
-    const { type, name, value, checked } = event.target;
-
-    setForm({ ...form, [name as string]: type === "checkbox" ? checked : value });
-    setAlertMessage(initialAlertMessage);
-  };
-
-  // Trigger CRUD request to server
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // Create temp form obj and remove empty fields
-    const filteredForm = Object.entries(form).reduce(
-      (acc, [key, value]) => ({ ...acc, ...(value !== "" && { [key]: value }) }),
-      {},
-    );
-
-    switch (requestType) {
-      case "addNewUser":
-        addNewUser({ ...form, born: date } as RegUserForm, false)
-          .then((newUser) =>
-            dispatch({
-              type: UserTypes.Set,
-              payload: newUser as User,
-            }),
-          )
-          .catch((err) => {
-            console.error("addNewUser global/CardForm err", err);
-            setAlertMessage({
-              isActive: true,
-              severity: "error",
-              message: err.message,
-            });
-          });
-        break;
-      case "loginUser":
-        loginUser(form as LogUserForm, false)
-          .then((loggedUser) =>
-            dispatch({
-              type: UserTypes.Set,
-              payload: loggedUser as User,
-            }),
-          )
-          .catch((err) => {
-            console.error("loginUser global/CardForm err", err);
-            setAlertMessage({
-              isActive: true,
-              severity: "error",
-              message: err.message,
-            });
-          });
-        break;
-      case "editUser":
-        editUser(user as User, filteredForm)
-          .then((EditedUser) =>
-            dispatch({
-              type: UserTypes.Set,
-              payload: EditedUser as User,
-            }),
-          )
-          .catch((err) => {
-            console.error("editUser global/CardForm err", err);
-            setAlertMessage({
-              isActive: true,
-              severity: "error",
-              message: err.message,
-            });
-          });
-        break;
-      default:
-        break;
-    }
-  };
-
   return (
     <div className={classes.outerContainer}>
       <div className={classes.innerContainer}>
-        <Typography variant="h1">{title}</Typography>
+        <Typography variant={titleVariant || "h1"}>{title}</Typography>
 
-        {alertMessage.isActive && <Alert severity={alertMessage.severity}>{alertMessage.message}</Alert>}
+        <Alert alertMessage={alertMessage} setAlertMessage={setAlertMessage} snackbar={requestType === "editUser"} />
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e, form, date, requestType, setAlertMessage, user, dispatch)}>
           {inputList.map(({ type, name, label, required }, index) =>
             type === "date" ? (
               <DatePicker
@@ -154,14 +81,14 @@ const CardForm: React.FC<Props> = ({ title, initialForm, inputList, requestType,
               <StatusSwitch
                 key={`${name}-${index}`}
                 form={form as RegUserForm}
-                handleChange={handleChange}
+                handleChange={(e) => handleChange(e, form, setForm)}
                 label={label}
                 name={name}
               />
             ) : (
               <TextField
                 key={`${name}-${index}`}
-                handleChange={handleChange}
+                handleChange={(e) => handleChange(e, form, setForm)}
                 type={type}
                 label={label}
                 name={name}

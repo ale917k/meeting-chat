@@ -26,11 +26,11 @@ type ServerResponse = {
 };
 
 // DB Models
-type Models = User;
+type Models = User | Chat;
 
 type User = {
   _id: string;
-  name: string;
+  username: string;
   born: Date;
   status: boolean;
   activeTopic?: {
@@ -38,12 +38,20 @@ type User = {
     category: string;
   };
   chats?: string[];
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-type UserMessage = {
-  id: string;
-  name: string;
-  room: string;
+type Chat = {
+  _id: string;
+  title: string;
+  category: string;
+  creatorId: string;
+  joinerId: string;
+  active: boolean;
+  messages: Message[];
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 type Message = {
@@ -73,12 +81,11 @@ type LogUserForm = {
   password: string;
 };
 
-type EditUserInfo = {
-  username?: string;
-  email?: string;
-};
-
-type EditUserPsw = {
-  oldPassword: string;
-  newPassword: string;
-};
+type EditUserForm =
+  | {
+      username: string;
+    }
+  | {
+      oldPassword: string;
+      newPassword: string;
+    };

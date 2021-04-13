@@ -98,7 +98,7 @@ export const addNewUser = async (newData: RegUserForm | User, admin: boolean): P
  * @param {Object} newData - Object containing the new User information which need to be updated.
  * @returns {string | undefined} Either User document or undefined if errored.
  */
-export const editUser = async (oldData: User, newData: EditUserInfo | EditUserPsw): Promise<User | undefined> => {
+export const editUser = async (oldData: User, newData: EditUserForm): Promise<User | undefined> => {
   try {
     const response = await patch(`/api/users/${oldData._id}`, newData);
     return response?.data as User;

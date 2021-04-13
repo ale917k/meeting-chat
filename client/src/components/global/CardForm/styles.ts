@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     height: "100%",
     padding: theme.spacing(1),
-    backgroundColor: theme.palette.common.black,
     textAlign: "center",
   },
   innerContainer: {
