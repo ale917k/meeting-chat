@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,6 +6,9 @@ import IconButton from "@material-ui/core/IconButton";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import QuestionAnswerRoundedIcon from "@material-ui/icons/QuestionAnswerRounded";
 import TuneRoundedIcon from "@material-ui/icons/TuneRounded";
+import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
+import Store from "context";
+import UserTypes from "context/user/types";
 import useStyles from "./styles";
 
 /**
@@ -13,6 +16,19 @@ import useStyles from "./styles";
  */
 const Header: React.FC = () => {
   const classes = useStyles();
+
+  const { dispatch } = useContext(Store);
+
+  // Logout User
+  const logout = () => {
+    dispatch({
+      type: UserTypes.Clear,
+      payload: null,
+    });
+
+    // Remove session token
+    window.localStorage.removeItem("mChatAccToken");
+  };
 
   return (
     <AppBar position="fixed" color="primary" className={classes.appBar}>
@@ -25,6 +41,9 @@ const Header: React.FC = () => {
         </IconButton>
         <IconButton component={Link} to="/impostazioni" color="inherit">
           <TuneRoundedIcon />
+        </IconButton>
+        <IconButton component={Link} to="/" onClick={logout} color="inherit">
+          <ExitToAppRoundedIcon />
         </IconButton>
       </Toolbar>
     </AppBar>
