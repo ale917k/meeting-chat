@@ -18,7 +18,7 @@ const handleSignup = (req: Request, res: Response): Promise<ServerResponse> => {
         passport.authenticate("local")(req, res, () => {
           resolve({
             success: true,
-            data: (req.user as UserDocument)._id,
+            data: user,
           });
         });
       })
@@ -37,7 +37,24 @@ const handleSignup = (req: Request, res: Response): Promise<ServerResponse> => {
  */
 export const signupAuthentication = () => (req: Request, res: Response) => {
   handleSignup(req, res)
-    .then((res: ServerResponse) => (res.data ? createSessions(res.data) : Promise.reject(res)))
-    .then((session) => res.status(201).json(session))
+    .then((signupRes: ServerResponse) => {
+      if (signupRes.data) {
+        const { hash, salt, ...newUser } = signupRes.data.toObject();
+
+        createSessions(signupRes.data._id)
+          .then((sessionRes: ServerResponse) => {
+            res.status(201).json({
+              success: true,
+              data: {
+                ...newUser,
+                token: sessionRes.data.token,
+              },
+            });
+          })
+          .catch((err) => Promise.reject(err));
+      } else {
+        Promise.reject(signupRes);
+      }
+    })
     .catch((err) => res.status(500).json(err));
 };

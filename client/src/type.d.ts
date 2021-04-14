@@ -21,7 +21,7 @@ type UserDispatch = {
 // Server Response
 type ServerResponse = {
   success: boolean;
-  data: Models[] | Models | Record<string, unknown> | string;
+  data?: Models[] | Models | Record<string, unknown> | string;
   error?: string;
 };
 
@@ -33,13 +33,15 @@ type User = {
   username: string;
   born: Date;
   status: boolean;
-  activeTopic?: {
-    title: string;
-    category: string;
-  };
+  activeTopic?: string;
   chats?: string[];
   createdAt: Date;
   updatedAt: Date;
+};
+
+type Message = {
+  user: string;
+  text: string;
 };
 
 type Chat = {
@@ -52,11 +54,6 @@ type Chat = {
   messages: Message[];
   createdAt: Date;
   updatedAt: Date;
-};
-
-type Message = {
-  user: string;
-  text: string;
 };
 
 // Global
@@ -76,6 +73,12 @@ type RegUserForm = {
   topicCategory: string;
 };
 
+type RegUserChat = {
+  title: string;
+  category: string;
+  creatorId: string;
+};
+
 type LogUserForm = {
   username: string;
   password: string;
@@ -88,4 +91,7 @@ type EditUserForm =
   | {
       oldPassword: string;
       newPassword: string;
+    }
+  | {
+      activeTopic: string;
     };

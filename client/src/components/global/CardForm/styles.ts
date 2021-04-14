@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     height: "100%",
     padding: theme.spacing(1),
-    textAlign: "center",
   },
   innerContainer: {
     display: "flex",
@@ -21,6 +20,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   field: {
     marginBottom: theme.spacing(2),
+  },
+  textCenter: {
+    textAlign: "center",
   },
 }));
 

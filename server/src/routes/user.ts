@@ -80,7 +80,7 @@ router
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.log("err", err);
           res.status(500).json({
             success: false,
             error: `Failed Setting New Password: ${err}`,
@@ -114,7 +114,7 @@ router
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.log("err", err);
           res.status(500).json({
             success: false,
             error: `Failed Resetting Password: ${err}`,

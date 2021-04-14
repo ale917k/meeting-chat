@@ -62,7 +62,9 @@ const CardForm: React.FC<Props> = ({
   return (
     <div className={classes.outerContainer}>
       <div className={classes.innerContainer}>
-        <Typography variant={titleVariant || "h1"}>{title}</Typography>
+        <Typography variant={titleVariant || "h1"} className={classes.textCenter}>
+          {title}
+        </Typography>
 
         <Alert alertMessage={alertMessage} setAlertMessage={setAlertMessage} snackbar={requestType === "editUser"} />
 
@@ -102,7 +104,7 @@ const CardForm: React.FC<Props> = ({
           </Button>
         </form>
 
-        {children}
+        <div className={classes.textCenter}>{children}</div>
       </div>
     </div>
   );
