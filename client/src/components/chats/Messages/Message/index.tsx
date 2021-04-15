@@ -12,14 +12,14 @@ type Props = {
  * @param {object} message - Object containing message info e.g. text and user author.
  * @param {string} name - Chat room name.
  */
-const Message: React.FC<Props> = ({ message: { user, text }, name }: Props) => {
+const Message: React.FC<Props> = ({ message: { userId, text }, name }: Props) => {
   const classes = useStyles();
 
   let isSentByCurrentUser = false;
 
   const trimmedName = name.trim().toLowerCase();
 
-  if (user === trimmedName) {
+  if (userId === trimmedName) {
     isSentByCurrentUser = true;
   }
 
@@ -35,7 +35,7 @@ const Message: React.FC<Props> = ({ message: { user, text }, name }: Props) => {
       <div className={`${classes.box} ${classes.bgLight}`}>
         <p className={`${classes.messageText} ${classes.colorDark}`}>{text}</p>
       </div>
-      <p className={`${classes.sentText} ${classes.paddingLeft}`}>{user}</p>
+      <p className={`${classes.sentText} ${classes.paddingLeft}`}>{userId}</p>
     </div>
   );
 };

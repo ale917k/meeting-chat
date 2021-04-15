@@ -84,6 +84,12 @@ type LogUserForm = {
   password: string;
 };
 
+type CreateActiveTopic = {
+  status: boolean;
+  topicTitle: string;
+  topicCategory: string;
+};
+
 type EditUserForm =
   | {
       username: string;
@@ -94,4 +100,5 @@ type EditUserForm =
     }
   | {
       activeTopic: string;
-    };
+    }
+  | CreateActiveTopic;

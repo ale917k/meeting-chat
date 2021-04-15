@@ -15,6 +15,16 @@ const Settings: React.FC = () => {
   const { user } = useContext(Store);
 
   // Form for editing User information
+  const editStatusForm = [
+    {
+      type: "checkbox",
+      name: "status",
+      label: "Pronto a chattare con altre persone?",
+      required: true,
+    },
+  ];
+
+  // Form for editing User information
   const editDetailsForm = [
     {
       id: "username",
@@ -49,6 +59,19 @@ const Settings: React.FC = () => {
         <Typography variant="h1">Impostazioni</Typography>
 
         <CardForm
+          title="Status"
+          titleVariant="h2"
+          initialForm={{
+            status: false,
+            topicTitle: "",
+            topicCategory: "",
+          }}
+          inputList={editStatusForm}
+          requestType="editUser"
+          buttonText="Aggiorna"
+        />
+
+        <CardForm
           title="Cambia nome"
           titleVariant="h2"
           initialForm={{
@@ -56,7 +79,7 @@ const Settings: React.FC = () => {
           }}
           inputList={editDetailsForm}
           requestType="editUser"
-          buttonText="Update"
+          buttonText="Aggiorna"
         />
 
         <CardForm
@@ -68,7 +91,7 @@ const Settings: React.FC = () => {
           }}
           inputList={editPasswordForm}
           requestType="editUser"
-          buttonText="Update"
+          buttonText="Aggiorna"
         />
       </div>
     </Container>

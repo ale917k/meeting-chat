@@ -71,8 +71,35 @@ export const loginUser = async (authData: LogUserForm, admin: boolean): Promise<
  * @returns {string | undefined} Either User document or undefined if errored.
  */
 export const editUser = async (oldData: User, newData: EditUserForm): Promise<User | undefined> => {
+  const { status, topicTitle, topicCategory } = newData as CreateActiveTopic;
+
+  // Create new chat if editing user status
+  if (status && topicTitle && topicCategory) {
+    const chatData = {
+      title: topicTitle,
+      category: topicCategory,
+      creatorId: oldData._id,
+    };
+
+    return addNewChat(chatData)
+      .then(async (chatId) => {
+        // Update user with activeTopic and status on true
+        try {
+          const response = await patch(`/api/users/${oldData._id}`, { status: true, activeTopic: chatId as string });
+          return response?.data as User;
+        } catch (err) {
+          throw new Error(err.message);
+        }
+      })
+      .catch((err) => {
+        throw new Error(err.message);
+      });
+  }
+
+  // Edit user info
   try {
     const response = await patch(`/api/users/${oldData._id}`, newData);
+
     return response?.data as User;
   } catch (err) {
     throw new Error(err.message);
@@ -97,8 +124,6 @@ export const addNewUser = async (newData: RegUserForm, admin: boolean): Promise<
 
     // Set localStorage token
     response?.data && window.localStorage.setItem(admin ? "mChatAdmAccToken" : "mChatAccToken", token);
-
-    console.log("response", response);
 
     if (newData.status) {
       const chatData = {

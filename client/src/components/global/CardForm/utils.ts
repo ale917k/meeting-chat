@@ -87,7 +87,21 @@ export const handleSubmit = async (
       type UserKey = keyof typeof user;
       type FormKey = keyof typeof form;
 
-      const updateUser = () => {
+      // Check if filteredForm field and user field differ
+      const comparedFields = Object.keys(filteredForm).map((formField) => {
+        // Check if filteredForm fields contains user fields (to remove password fields)
+        const matchedField = Object.keys(user as User).indexOf(formField);
+
+        // Check if fields match (have same key) but differ in value
+        if (matchedField > -1) {
+          if (filteredForm[formField as FormKey] !== user?.[formField as UserKey]) return "differ";
+          return "equal";
+        }
+        return "unmatched";
+      })[0];
+
+      // Make api call if form fields are different than user fields
+      if (comparedFields === "differ" || comparedFields === "unmatched") {
         editUser(user as User, filteredForm)
           .then((editedUser) => {
             dispatch({
@@ -109,29 +123,13 @@ export const handleSubmit = async (
               message: err.message,
             });
           });
-      };
-
-      // Check if filteredForm field and user field differ
-      const comparedFields = Object.keys(filteredForm).map((formField) => {
-        // Check if filteredForm fields contains user fields (to remove password fields)
-        const matchedField = Object.keys(user as User).indexOf(formField);
-
-        // Check if fields match (have same key) but differ in value
-        if (matchedField > -1) {
-          if (filteredForm[formField as FormKey] !== user?.[formField as UserKey]) return "differ";
-          return "equal";
-        }
-        return "unmatched";
-      })[0];
-
-      // Make api call if form fields are different than user fields
-      if (comparedFields === "differ" || comparedFields === "unmatched") updateUser();
-      else
+      } else {
         setAlertMessage({
           isActive: true,
           severity: "warning",
           message: "Nessuna informazione da aggiornare",
         });
+      }
 
       break;
     }
