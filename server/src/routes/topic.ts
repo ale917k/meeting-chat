@@ -1,14 +1,14 @@
 import express from "express";
-import Chat from "server/models/Chat";
+import Topic from "server/models/Topic";
 
-// Initialized chatAPI router
+// Initialized topicAPI router
 const router = express.Router();
 
-// Requests targetting all Chats
+// Requests targetting all Topics
 router
   .route("/")
   .get((_, res) => {
-    Chat.find()
+    Topic.find()
       .then((result) => {
         res.status(201).json({
           success: true,
@@ -19,56 +19,56 @@ router
         console.log("err", err);
         res.status(500).json({
           success: false,
-          error: `Failed Retrieving Chats: ${err}`,
+          error: `Failed Retrieving Topics: ${err}`,
         });
       });
   })
   .post((req, res) => {
-    const newChat = new Chat({
+    const newTopic = new Topic({
       title: req.body.title,
       category: req.body.category,
       creatorId: req.body.creatorId,
       active: true,
     });
 
-    newChat
+    newTopic
       .save()
       .then(() => {
         res.status(201).json({
           success: true,
-          data: newChat._id,
+          data: newTopic._id,
         });
       })
       .catch((err) => {
         console.log("err", err);
         res.status(500).json({
           success: false,
-          error: `Failed Adding Chat: ${err}`,
-        });
-      });
-  });
-
-// Requests targetting a specific Chat
-router
-  .route("/:chatId")
-  .get((req, res) => {
-    Chat.findOne({ _id: req.params.chatId })
-      .then((result) => {
-        res.status(201).json({
-          success: true,
-          data: result,
-        });
-      })
-      .catch((err) => {
-        console.log("err", err);
-        res.status(500).json({
-          success: false,
-          error: `Failed Retrieving Chat: ${err}`,
+          error: `Failed Adding Topic: ${err}`,
         });
       });
   })
   .patch((req, res) => {
-    Chat.updateOne({ _id: req.params.chatId }, req.body)
+    // Disable topic if creator (user) id is parsed
+    Topic.updateOne({ creatorId: req.body.creatorId }, { active: false })
+      .then(() => {
+        res.status(201).json({
+          success: true,
+        });
+      })
+      .catch((err) => {
+        console.log("err", err);
+        res.status(500).json({
+          success: false,
+          error: `Failed Disabling Topic: ${err}`,
+        });
+      });
+  });
+
+// Requests targetting a specific Topic
+router
+  .route("/:topicId")
+  .get((req, res) => {
+    Topic.findOne({ _id: req.params.topicId })
       .then((result) => {
         res.status(201).json({
           success: true,
@@ -79,12 +79,28 @@ router
         console.log("err", err);
         res.status(500).json({
           success: false,
-          error: `Failed Updating Chat: ${err}`,
+          error: `Failed Retrieving Topic: ${err}`,
+        });
+      });
+  })
+  .patch((req, res) => {
+    Topic.updateOne({ _id: req.params.topicId }, req.body)
+      .then((result) => {
+        res.status(201).json({
+          success: true,
+          data: result,
+        });
+      })
+      .catch((err) => {
+        console.log("err", err);
+        res.status(500).json({
+          success: false,
+          error: `Failed Updating Topic: ${err}`,
         });
       });
   })
   .delete((req, res) => {
-    Chat.deleteOne({ _id: req.params.chatId })
+    Topic.deleteOne({ _id: req.params.topicId })
       .then((result) => {
         res.status(201).json({
           success: true,
@@ -95,7 +111,7 @@ router
         console.log("err", err);
         res.status(500).json({
           success: false,
-          error: `Failed Deleting Chat: ${err}`,
+          error: `Failed Deleting Topic: ${err}`,
         });
       });
   });

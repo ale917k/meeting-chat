@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 type Message = {
-  user: string;
+  userId: string;
   text: string;
 };
 
-export type ChatDocument = mongoose.Document & {
+export type TopicDocument = mongoose.Document & {
   _id: string;
   title: string;
   category: string;
@@ -15,10 +15,10 @@ export type ChatDocument = mongoose.Document & {
   messages: Message[];
   createdAt: Date;
   updatedAt: Date;
-  new (...args: any): ChatDocument;
+  new (...args: any): TopicDocument;
 };
 
-const chatSchema = new mongoose.Schema(
+const topicSchema = new mongoose.Schema(
   {
     title: String,
     category: String,
@@ -28,12 +28,12 @@ const chatSchema = new mongoose.Schema(
     messages: Array,
   },
   {
-    collection: "chats",
+    collection: "topics",
     timestamps: true,
     versionKey: false,
   },
 );
 
-const Chat = mongoose.model<ChatDocument>("Chat", chatSchema);
+const Topic = mongoose.model<TopicDocument>("Topic", topicSchema);
 
-export default Chat;
+export default Topic;

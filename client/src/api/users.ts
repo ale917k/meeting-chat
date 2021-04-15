@@ -1,15 +1,15 @@
 import { get, post, patch } from "api";
-import { addNewChat } from "api/chats";
+import { addNewTopic, disableTopic } from "api/topics";
 
 /**
  * Retrieve User with specified ID.
  * @param {string} userId - Id of user to retrieve.
- * @returns {Models | undefined} Either User document or undefined if errored.
+ * @returns {User | undefined} Either User document or undefined if errored.
  */
-export const retrieveUser = async (userId: string): Promise<Models | undefined> => {
+export const retrieveUser = async (userId: string): Promise<User | undefined> => {
   try {
     const response = await get(`/api/users/${userId}`);
-    return response?.data as Models;
+    return response?.data as User;
   } catch (err) {
     throw new Error(err.message);
   }
@@ -73,19 +73,35 @@ export const loginUser = async (authData: LogUserForm, admin: boolean): Promise<
 export const editUser = async (oldData: User, newData: EditUserForm): Promise<User | undefined> => {
   const { status, topicTitle, topicCategory } = newData as CreateActiveTopic;
 
-  // Create new chat if editing user status
-  if (status && topicTitle && topicCategory) {
-    const chatData = {
+  // Create new topic if editing user status
+  if (Object.prototype.hasOwnProperty.call(newData, "status")) {
+    const topicData = {
       title: topicTitle,
       category: topicCategory,
       creatorId: oldData._id,
     };
 
-    return addNewChat(chatData)
-      .then(async (chatId) => {
-        // Update user with activeTopic and status on true
+    // Add new topic if status is true, remove if on false
+    if (status) {
+      return addNewTopic(topicData)
+        .then(async (topicId) => {
+          // Update user with activeTopic and status on true
+          try {
+            const response = await patch(`/api/users/${oldData._id}`, { status: true, activeTopic: topicId as string });
+            return response?.data as User;
+          } catch (err) {
+            throw new Error(err.message);
+          }
+        })
+        .catch((err) => {
+          throw new Error(err.message);
+        });
+    }
+    disableTopic(oldData._id)
+      .then(async () => {
+        // Update user removing activeTopic and setting status on false
         try {
-          const response = await patch(`/api/users/${oldData._id}`, { status: true, activeTopic: chatId as string });
+          const response = await patch(`/api/users/${oldData._id}`, { status: false, activeTopic: "" });
           return response?.data as User;
         } catch (err) {
           throw new Error(err.message);
@@ -112,7 +128,10 @@ export const editUser = async (oldData: User, newData: EditUserForm): Promise<Us
  * @param {boolean} admin - If true log admin users.
  * @returns {User | undefined} Either User document or undefined if errored.
  */
-export const addNewUser = async (newData: RegUserForm, admin: boolean): Promise<User | undefined> => {
+export const addNewUser = async (
+  newData: RegUserForm,
+  admin: boolean,
+): Promise<{ user: User; topic?: Topic } | undefined> => {
   try {
     const { topicTitle, topicCategory, ...userData } = newData;
 
@@ -126,17 +145,20 @@ export const addNewUser = async (newData: RegUserForm, admin: boolean): Promise<
     response?.data && window.localStorage.setItem(admin ? "mChatAdmAccToken" : "mChatAccToken", token);
 
     if (newData.status) {
-      const chatData = {
+      const topicData = {
         title: topicTitle,
         category: topicCategory,
         creatorId: (response?.data as UserWithToken)._id,
       };
 
-      return addNewChat(chatData)
-        .then(async (chatId) => {
+      return addNewTopic(topicData)
+        .then(async (topicId) => {
           try {
-            const updatedUser = await editUser(newUser, { activeTopic: chatId as string });
-            return updatedUser;
+            const updatedUser = await editUser(newUser, { activeTopic: topicId as string });
+            return {
+              user: updatedUser as User,
+              topic: topicData as Topic,
+            };
           } catch (err) {
             throw new Error(err.message);
           }
@@ -145,7 +167,7 @@ export const addNewUser = async (newData: RegUserForm, admin: boolean): Promise<
           throw new Error(err.message);
         });
     }
-    return newUser;
+    return { user: newUser };
   } catch (err) {
     throw new Error(err.message);
   }

@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
+import { retrieveTopic } from "api/topics";
 import Store from "context";
+import TopicTypes from "context/topic/types";
 import CardForm from "components/global/CardForm";
 import useStyles from "./styles";
 
@@ -12,7 +14,20 @@ const Settings: React.FC = () => {
   const classes = useStyles();
 
   // Context for retrieving User state from AppContext
-  const { user } = useContext(Store);
+  const { user, topic, dispatch } = useContext(Store);
+
+  useEffect(() => {
+    user?.activeTopic &&
+      !topic &&
+      retrieveTopic(user.activeTopic)
+        .then((retrievedTopic) => {
+          dispatch({
+            type: TopicTypes.Set,
+            payload: retrievedTopic as Topic,
+          });
+        })
+        .catch((err) => console.error("retrieveUser App err", err));
+  }, []);
 
   // Form for editing User information
   const editStatusForm = [
@@ -54,47 +69,52 @@ const Settings: React.FC = () => {
   ];
 
   return (
-    <Container maxWidth="lg">
-      <div className={classes.wrapper}>
-        <Typography variant="h1">Impostazioni</Typography>
+    <>
+      {(user && topic) ||
+        (user && !user.activeTopic && (
+          <Container maxWidth="lg">
+            <div className={classes.wrapper}>
+              <Typography variant="h1">Impostazioni</Typography>
 
-        <CardForm
-          title="Status"
-          titleVariant="h2"
-          initialForm={{
-            status: false,
-            topicTitle: "",
-            topicCategory: "",
-          }}
-          inputList={editStatusForm}
-          requestType="editUser"
-          buttonText="Aggiorna"
-        />
+              <CardForm
+                title="Stato"
+                titleVariant="h2"
+                initialForm={{
+                  status: user.status,
+                  topicTitle: topic?.title || "",
+                  topicCategory: topic?.category || "",
+                }}
+                inputList={editStatusForm}
+                requestType="editUser"
+                buttonText="Aggiorna"
+              />
 
-        <CardForm
-          title="Cambia nome"
-          titleVariant="h2"
-          initialForm={{
-            username: (user as User).username,
-          }}
-          inputList={editDetailsForm}
-          requestType="editUser"
-          buttonText="Aggiorna"
-        />
+              <CardForm
+                title="Cambia nome"
+                titleVariant="h2"
+                initialForm={{
+                  username: (user as User).username,
+                }}
+                inputList={editDetailsForm}
+                requestType="editUser"
+                buttonText="Aggiorna"
+              />
 
-        <CardForm
-          title="Aggiorna password"
-          titleVariant="h2"
-          initialForm={{
-            oldPassword: "",
-            newPassword: "",
-          }}
-          inputList={editPasswordForm}
-          requestType="editUser"
-          buttonText="Aggiorna"
-        />
-      </div>
-    </Container>
+              <CardForm
+                title="Aggiorna password"
+                titleVariant="h2"
+                initialForm={{
+                  oldPassword: "",
+                  newPassword: "",
+                }}
+                inputList={editPasswordForm}
+                requestType="editUser"
+                buttonText="Aggiorna"
+              />
+            </div>
+          </Container>
+        ))}
+    </>
   );
 };
 

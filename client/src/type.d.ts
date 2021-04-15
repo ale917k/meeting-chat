@@ -12,12 +12,6 @@ type ActionMap<M extends { [index: string]: unknown }> = {
       };
 };
 
-// Dispatch actions for UserType
-type UserDispatch = {
-  type: string;
-  payload: User;
-};
-
 // Server Response
 type ServerResponse = {
   success: boolean;
@@ -34,20 +28,19 @@ type User = {
   born: Date;
   status: boolean;
   activeTopic?: string;
-  chats?: string[];
+  chatsId?: string[];
   createdAt: Date;
   updatedAt: Date;
 };
 
 type Message = {
-  user: string;
+  userId: string;
   text: string;
 };
 
 type Chat = {
   _id: string;
-  title: string;
-  category: string;
+  topicId: string;
   creatorId: string;
   joinerId: string;
   active: boolean;
@@ -55,6 +48,18 @@ type Chat = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+type Topic = {
+  _id: string;
+  title: string;
+  category: string;
+  creatorId: string;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type Topics = Topic[];
 
 // Global
 type AlertMessage = {
@@ -73,7 +78,7 @@ type RegUserForm = {
   topicCategory: string;
 };
 
-type RegUserChat = {
+type RegUserTopic = {
   title: string;
   category: string;
   creatorId: string;

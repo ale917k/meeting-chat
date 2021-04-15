@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction } from "react";
 import { addNewUser, loginUser, editUser } from "api/users";
 import UserActions from "context/user/actions";
 import UserTypes from "context/user/types";
+import TopicActions from "context/topic/actions";
+import TopicTypes from "context/topic/types";
 
 /**
  * Listen to form inputs and updates form state respectively.
@@ -36,7 +38,7 @@ export const handleSubmit = async (
   requestType: string,
   setAlertMessage: Dispatch<SetStateAction<AlertMessage>>,
   user: User | null,
-  dispatch: Dispatch<UserActions>,
+  dispatch: Dispatch<UserActions | TopicActions>,
 ): Promise<void> => {
   event.preventDefault();
 
@@ -49,12 +51,21 @@ export const handleSubmit = async (
   switch (requestType) {
     case "addNewUser": {
       addNewUser({ ...form, born: date } as RegUserForm, false)
-        .then((newUser) =>
-          dispatch({
-            type: UserTypes.Set,
-            payload: newUser as User,
-          }),
-        )
+        .then((res) => {
+          if (res?.user) {
+            dispatch({
+              type: UserTypes.Set,
+              payload: res.user as User,
+            });
+          }
+
+          if (res?.topic) {
+            dispatch({
+              type: TopicTypes.Set,
+              payload: res.topic as Topic,
+            });
+          }
+        })
         .catch((err) => {
           console.error("addNewUser global/CardForm err", err);
           setAlertMessage({
@@ -102,6 +113,7 @@ export const handleSubmit = async (
 
       // Make api call if form fields are different than user fields
       if (comparedFields === "differ" || comparedFields === "unmatched") {
+        console.log("filteredForm", filteredForm);
         editUser(user as User, filteredForm)
           .then((editedUser) => {
             dispatch({
