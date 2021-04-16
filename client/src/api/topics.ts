@@ -3,9 +3,9 @@ import { get, post, patch } from "api";
 /**
  * Retrieve active Topic of logged User.
  * @param {string} topicId - Id of topic to retrieve.
- * @returns {Topic | undefined} Either Topic document or undefined if errored.
+ * @returns {Topic} Active Topic document.
  */
-export const retrieveTopic = async (topicId: string): Promise<Topic | undefined> => {
+export const retrieveTopic = async (topicId: string): Promise<Topic> => {
   try {
     const response = await get(`/api/topics/${topicId}`);
     return response?.data as Topic;
@@ -15,11 +15,24 @@ export const retrieveTopic = async (topicId: string): Promise<Topic | undefined>
 };
 
 /**
+ * Retrieve list of all Topics.
+ * @returns {Topics} Array of Topics.
+ */
+export const retrieveTopics = async (): Promise<Topics> => {
+  try {
+    const response = await get("/api/topics");
+    return response?.data as Topics;
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
+
+/**
  * Create new Topic.
  * @param {object} newData - Title, category and creatorId for creating new Topic.
- * @returns {string | undefined} Either newly created Topic id or undefined if errored.
+ * @returns {string} Newly created Topic.
  */
-export const addNewTopic = async (newData: RegUserTopic): Promise<string | undefined> => {
+export const addNewTopic = async (newData: RegUserTopic): Promise<string> => {
   try {
     const response = await post("/api/topics", newData);
 
@@ -34,13 +47,11 @@ export const addNewTopic = async (newData: RegUserTopic): Promise<string | undef
  * @param {string} creatorId - User id who created the Topic to disable.
  * @returns {boolean | undefined} Either true if disabled successfully or undefined if errored.
  */
-export const disableTopic = async (creatorId: string): Promise<boolean | undefined> => {
-  console.log("we disabling");
+export const disableTopic = async (creatorId: string): Promise<boolean> => {
   try {
     await patch("/api/topics", { creatorId });
     return true;
   } catch (err) {
-    console.log("errored", err);
     throw new Error(err.message);
   }
 };

@@ -51,11 +51,11 @@ const App: React.FC = () => {
       !user &&
         loginUserWithToken(token)
           .then((userId) =>
-            retrieveUser(userId as string)
+            retrieveUser(userId)
               .then((loggedUser) => {
                 dispatch({
                   type: UserTypes.Set,
-                  payload: loggedUser as User,
+                  payload: loggedUser,
                 });
                 setAppLoaded(true);
               })

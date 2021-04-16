@@ -81,7 +81,7 @@ export const handleSubmit = async (
         .then((loggedUser) =>
           dispatch({
             type: UserTypes.Set,
-            payload: loggedUser as User,
+            payload: loggedUser,
           }),
         )
         .catch((err) => {
@@ -113,12 +113,11 @@ export const handleSubmit = async (
 
       // Make api call if form fields are different than user fields
       if (comparedFields === "differ" || comparedFields === "unmatched") {
-        console.log("filteredForm", filteredForm);
         editUser(user as User, filteredForm)
           .then((editedUser) => {
             dispatch({
               type: UserTypes.Set,
-              payload: editedUser as User,
+              payload: editedUser,
             });
 
             setAlertMessage({

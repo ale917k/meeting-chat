@@ -23,10 +23,10 @@ const Settings: React.FC = () => {
         .then((retrievedTopic) => {
           dispatch({
             type: TopicTypes.Set,
-            payload: retrievedTopic as Topic,
+            payload: retrievedTopic,
           });
         })
-        .catch((err) => console.error("retrieveUser App err", err));
+        .catch((err) => console.error("retrieveTopic Settings err", err));
   }, []);
 
   // Form for editing User information
@@ -70,50 +70,49 @@ const Settings: React.FC = () => {
 
   return (
     <>
-      {(user && topic) ||
-        (user && !user.activeTopic && (
-          <Container maxWidth="lg">
-            <div className={classes.wrapper}>
-              <Typography variant="h1">Impostazioni</Typography>
+      {((user && topic) || (user && !user.activeTopic)) && (
+        <Container maxWidth="lg">
+          <div className={classes.wrapper}>
+            <Typography variant="h1">Impostazioni</Typography>
 
-              <CardForm
-                title="Stato"
-                titleVariant="h2"
-                initialForm={{
-                  status: user.status,
-                  topicTitle: topic?.title || "",
-                  topicCategory: topic?.category || "",
-                }}
-                inputList={editStatusForm}
-                requestType="editUser"
-                buttonText="Aggiorna"
-              />
+            <CardForm
+              title="Stato"
+              titleVariant="h2"
+              initialForm={{
+                status: user.status,
+                topicTitle: topic?.title || "",
+                topicCategory: topic?.category || "",
+              }}
+              inputList={editStatusForm}
+              requestType="editUser"
+              buttonText="Aggiorna"
+            />
 
-              <CardForm
-                title="Cambia nome"
-                titleVariant="h2"
-                initialForm={{
-                  username: (user as User).username,
-                }}
-                inputList={editDetailsForm}
-                requestType="editUser"
-                buttonText="Aggiorna"
-              />
+            <CardForm
+              title="Cambia nome"
+              titleVariant="h2"
+              initialForm={{
+                username: (user as User).username,
+              }}
+              inputList={editDetailsForm}
+              requestType="editUser"
+              buttonText="Aggiorna"
+            />
 
-              <CardForm
-                title="Aggiorna password"
-                titleVariant="h2"
-                initialForm={{
-                  oldPassword: "",
-                  newPassword: "",
-                }}
-                inputList={editPasswordForm}
-                requestType="editUser"
-                buttonText="Aggiorna"
-              />
-            </div>
-          </Container>
-        ))}
+            <CardForm
+              title="Aggiorna password"
+              titleVariant="h2"
+              initialForm={{
+                oldPassword: "",
+                newPassword: "",
+              }}
+              inputList={editPasswordForm}
+              requestType="editUser"
+              buttonText="Aggiorna"
+            />
+          </div>
+        </Container>
+      )}
     </>
   );
 };

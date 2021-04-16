@@ -3,13 +3,16 @@ import UserActions from "./user/actions";
 import userReducer from "./user/reducer";
 import TopicActions from "./topic/actions";
 import topicReducer from "./topic/reducer";
+import TopicsActions from "./topics/actions";
+import topicsReducer from "./topics/reducer";
 
 type InitialState = {
   user: User | null;
   topic: Topic | null;
+  topics: Topics;
 };
 
-type Actions = UserActions | TopicActions;
+type Actions = UserActions | TopicActions | TopicsActions;
 
 type Context = InitialState & {
   dispatch: Dispatch<Actions>;
@@ -19,6 +22,7 @@ type Context = InitialState & {
 const initialState = {
   user: null,
   topic: null,
+  topics: [],
 };
 
 // Store for consuming Context on App
@@ -28,9 +32,10 @@ const Store = createContext<Context>({
 });
 
 // Main Context reducer
-const mainReducer = ({ user, topic }: InitialState, action: Actions) => ({
+const mainReducer = ({ user, topic, topics }: InitialState, action: Actions) => ({
   user: userReducer(user, action as UserActions),
   topic: topicReducer(topic, action as TopicActions),
+  topics: topicsReducer(topics, action as TopicsActions),
 });
 
 // Context Provider

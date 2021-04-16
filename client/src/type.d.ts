@@ -15,12 +15,12 @@ type ActionMap<M extends { [index: string]: unknown }> = {
 // Server Response
 type ServerResponse = {
   success: boolean;
-  data?: Models[] | Models | Record<string, unknown> | string;
+  data?: Models[] | Models | SessionRes | string;
   error?: string;
 };
 
 // DB Models
-type Models = User | Chat;
+type Models = User | Topic;
 
 type User = {
   _id: string;
