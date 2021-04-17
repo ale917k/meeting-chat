@@ -10,3 +10,8 @@ type UserType = {
   name: string;
   room: string;
 };
+
+type Message = {
+  userId: string;
+  text: string;
+};

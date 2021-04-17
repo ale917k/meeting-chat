@@ -9,6 +9,7 @@ import "module-alias/register";
 import User from "server/models/User";
 import userAPI from "server/routes/user";
 import topicAPI from "server/routes/topic";
+import chatAPI from "server/routes/chat";
 import { addUser, removeUser, getUser, getUsersInRoom } from "server/controllers/users";
 
 // App configuration
@@ -40,6 +41,7 @@ app.use(express.json());
 app.use(morgan("combined"));
 app.use(`${baseURL}/users`, userAPI);
 app.use(`${baseURL}/topics`, topicAPI);
+app.use(`${baseURL}/chats`, chatAPI);
 
 // app.use((_, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "http://localhost:3000");

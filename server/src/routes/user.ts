@@ -21,7 +21,7 @@ router
         });
       })
       .catch((err) => {
-        console.log("err", err);
+        console.warn(`Failed Retrieving Users: ${err}`);
         res.status(500).json({
           success: false,
           error: `Failed Retrieving Users: ${err}`,
@@ -45,7 +45,7 @@ router
         });
       })
       .catch((err) => {
-        console.log("err", err);
+        console.warn(`Failed Retrieving User: ${err}`);
         res.status(500).json({
           success: false,
           error: `Failed Retrieving User: ${err}`,
@@ -80,7 +80,7 @@ router
           }
         })
         .catch((err) => {
-          console.log("err", err);
+          console.warn(`Failed Setting New Password: ${err}`);
           res.status(500).json({
             success: false,
             error: `Failed Setting New Password: ${err}`,
@@ -114,7 +114,7 @@ router
           }
         })
         .catch((err) => {
-          console.log("err", err);
+          console.warn(`Failed Resetting Password: ${err}`);
           res.status(500).json({
             success: false,
             error: `Failed Resetting Password: ${err}`,
@@ -130,7 +130,7 @@ router
           });
         })
         .catch((err) => {
-          console.log("err", err);
+          console.warn(`Failed Updating User: ${err}`);
           res.status(500).json({
             success: false,
             error: `Failed Updating User: ${err}`,
@@ -147,7 +147,7 @@ router
         });
       })
       .catch((err) => {
-        console.log("err", err);
+        console.warn(`Failed Deleting User: ${err}`);
         res.status(500).json({
           success: false,
           error: `Failed Deleting User: ${err}`,

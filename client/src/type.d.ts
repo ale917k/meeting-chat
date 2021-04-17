@@ -39,14 +39,14 @@ type Message = {
 };
 
 type Chat = {
-  _id: string;
+  _id?: string;
   topicId: string;
   creatorId: string;
   joinerId: string;
   active: boolean;
   messages: Message[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 type Topic = {

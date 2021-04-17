@@ -1,11 +1,14 @@
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   card: {
     width: 700,
-    minHeight: "30vh",
     height: "fit-content",
-    margin: `0 auto ${theme.spacing(3)}px`,
+    margin: "0 auto",
+  },
+  buttons: {
+    display: "flex",
+    justifyContent: "space-between",
   },
 }));
 

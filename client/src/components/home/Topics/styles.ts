@@ -5,20 +5,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignSelf: "flex-start",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "center",
     width: "100%",
     height: `calc(100% - ${theme.spacing(8)}px)`,
     padding: `${theme.spacing(4)}px 0`,
     overflowY: "auto",
-  },
-  scrollWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
-    width: "100%",
-  },
-  loader: {
-    position: "absolute",
-    bottom: "20%",
   },
 }));
 

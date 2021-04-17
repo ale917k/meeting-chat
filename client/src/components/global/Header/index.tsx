@@ -9,6 +9,7 @@ import TuneRoundedIcon from "@material-ui/icons/TuneRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import Store from "context";
 import UserTypes from "context/user/types";
+import TopicsTypes from "context/topics/types";
 import useStyles from "./styles";
 
 /**
@@ -24,6 +25,11 @@ const Header: React.FC = () => {
     dispatch({
       type: UserTypes.Clear,
       payload: null,
+    });
+
+    dispatch({
+      type: TopicsTypes.Clear,
+      payload: [],
     });
 
     // Remove session token

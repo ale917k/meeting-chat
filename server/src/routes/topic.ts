@@ -20,13 +20,14 @@ router
     newTopic
       .save()
       .then(() => {
+        console.log("newTopic", newTopic);
         res.status(201).json({
           success: true,
           data: newTopic._id,
         });
       })
       .catch((err) => {
-        console.log("err", err);
+        console.warn(`Failed Adding Topic: ${err}`);
         res.status(500).json({
           success: false,
           error: `Failed Adding Topic: ${err}`,
@@ -42,7 +43,7 @@ router
         });
       })
       .catch((err) => {
-        console.log("err", err);
+        console.warn(`Failed Disabling Topic: ${err}`);
         res.status(500).json({
           success: false,
           error: `Failed Disabling Topic: ${err}`,
@@ -62,7 +63,7 @@ router
         });
       })
       .catch((err) => {
-        console.log("err", err);
+        console.warn(`Failed Retrieving Topic: ${err}`);
         res.status(500).json({
           success: false,
           error: `Failed Retrieving Topic: ${err}`,
@@ -78,7 +79,7 @@ router
         });
       })
       .catch((err) => {
-        console.log("err", err);
+        console.warn(`Failed Updating Topic: ${err}`);
         res.status(500).json({
           success: false,
           error: `Failed Updating Topic: ${err}`,
@@ -94,7 +95,7 @@ router
         });
       })
       .catch((err) => {
-        console.log("err", err);
+        console.warn(`Failed Deleting Topic: ${err}`);
         res.status(500).json({
           success: false,
           error: `Failed Deleting Topic: ${err}`,

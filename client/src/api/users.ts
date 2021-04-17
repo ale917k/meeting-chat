@@ -88,6 +88,7 @@ export const editUser = async (oldData: User, newData: EditUserForm): Promise<Us
           // Update user with activeTopic and status on true
           try {
             const response = await patch(`/api/users/${oldData._id}`, { status: true, activeTopic: topicId });
+
             return response?.data as User;
           } catch (err) {
             throw new Error(err.message);
@@ -102,6 +103,7 @@ export const editUser = async (oldData: User, newData: EditUserForm): Promise<Us
         // Update user removing activeTopic and setting status on false
         try {
           const response = await patch(`/api/users/${oldData._id}`, { status: false, activeTopic: "" });
+
           return response?.data as User;
         } catch (err) {
           throw new Error(err.message);

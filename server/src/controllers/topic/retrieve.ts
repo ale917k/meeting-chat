@@ -14,7 +14,7 @@ const retrieveTopics = () => async (req: Request, res: Response) => {
     const limit = 10;
 
     // Fetched topics
-    const topics = await Topic.find({}, undefined, { skip, limit });
+    const topics = await Topic.find({ creatorId: { $ne: req.query.user.toString() } }, undefined, { skip, limit });
 
     return res.status(201).json({
       success: true,
