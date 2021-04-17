@@ -15,12 +15,13 @@ export const retrieveTopic = async (topicId: string): Promise<Topic> => {
 };
 
 /**
- * Retrieve list of all Topics.
+ * Retrieve list of Topics at specified page number.
+ * @param {number} page - Page number as reference of data to fetch.
  * @returns {Topics} Array of Topics.
  */
-export const retrieveTopics = async (): Promise<Topics> => {
+export const retrieveTopics = async (page: number): Promise<Topics> => {
   try {
-    const response = await get("/api/topics");
+    const response = await get(`/api/topics?page=${page}`);
     return response?.data as Topics;
   } catch (err) {
     throw new Error(err.message);

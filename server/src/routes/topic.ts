@@ -1,4 +1,5 @@
 import express from "express";
+import retrieveTopics from "server/controllers/topic/retrieve";
 import Topic from "server/models/Topic";
 
 // Initialized topicAPI router
@@ -7,22 +8,7 @@ const router = express.Router();
 // Requests targetting all Topics
 router
   .route("/")
-  .get((_, res) => {
-    Topic.find()
-      .then((result) => {
-        res.status(201).json({
-          success: true,
-          data: result,
-        });
-      })
-      .catch((err) => {
-        console.log("err", err);
-        res.status(500).json({
-          success: false,
-          error: `Failed Retrieving Topics: ${err}`,
-        });
-      });
-  })
+  .get(retrieveTopics())
   .post((req, res) => {
     const newTopic = new Topic({
       title: req.body.title,
