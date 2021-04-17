@@ -15,13 +15,13 @@ export const retrieveTopic = async (topicId: string): Promise<Topic> => {
 };
 
 /**
- * Retrieve list of Topics at specified page number.
- * @param {number} page - Page number as reference of data to fetch.
+ * Retrieve list of Topics at specified skip number.
+ * @param {number} skip - Number of entries to skip before fetching new data.
  * @returns {Topics} Array of Topics.
  */
-export const retrieveTopics = async (page: number): Promise<Topics> => {
+export const retrieveTopics = async (skip: number): Promise<Topics> => {
   try {
-    const response = await get(`/api/topics?page=${page}`);
+    const response = await get(`/api/topics?skip=${skip}`);
     return response?.data as Topics;
   } catch (err) {
     throw new Error(err.message);

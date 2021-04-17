@@ -146,7 +146,7 @@ let res = [
       updatedAt: new Date("2020-01-01T00:00:00.174Z"),
     },
     {
-      title: "Topic Test 15 ",
+      title: "Topic Test 15",
       category: "Categoria 1",
       creatorId: "123456789123456789123451",
       active: true,
